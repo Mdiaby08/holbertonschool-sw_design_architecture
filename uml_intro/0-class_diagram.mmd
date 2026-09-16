@@ -1,0 +1,34 @@
+classDiagram
+
+    class Library {
+        +add_book(book: Book)
+        +register_user(user: User)
+        +create_loan(user: User, book: Book)
+    }
+
+    class Book {
+        +title: str
+        +author: str
+        +state: bool
+        +mark_as_unavailable()
+        +mark_as_available()
+    }
+
+    class User {
+        +name: str
+        +email: str
+    }
+
+    class Loan {
+        +start_date: str
+        +end_date: str
+        +close_loan()
+    }
+
+    %% Relationships
+    Library "1" --> "*" Book : manages
+    Library "1" --> "*" User : manages
+    Library "1" --> "*" Loan : creates
+
+    Loan "1" --> "1" Book : references
+    Loan "1" --> "1" User : references
