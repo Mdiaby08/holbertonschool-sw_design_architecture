@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
-factory.register_kind("scooter", Scooter)
+def main():
+    factory = VehicleFactory()
 
-print(factory.create("scooter").mode())
+    # LIGNE À AJOUTER
+    factory.register_kind("scooter", Scooter)
+
+    print(factory.create("bus").mode())
+    print(factory.create("train").mode())
+    print(factory.create("bike").mode())
+
+    # LIGNE À AJOUTER
+    print(factory.create("scooter").mode())
