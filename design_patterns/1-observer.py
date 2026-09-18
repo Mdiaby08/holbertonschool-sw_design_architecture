@@ -6,7 +6,7 @@ class NewsSubject:
 
     def subscribe(self, observer, topics=None):
         if topics is None:
-            topics = {"*"}
+            topics = {"*"}   # écoute tous les topics
         for topic in topics:
             self._observers.setdefault(topic, set()).add(observer)
 
@@ -17,11 +17,16 @@ class NewsSubject:
 
     def notify(self, topic, data):
         observers = set()
+
+        # observers spécifiques au topic
         if topic in self._observers:
             observers |= self._observers[topic]
+
+        # observers qui écoutent tous les topics
         if "*" in self._observers:
             observers |= self._observers["*"]
 
+        # notification
         for obs in list(observers):
             obs.update(topic, data)
 
@@ -42,21 +47,22 @@ class SmsObserver:
 
 
 def main():
-        subject = NewsSubject()
+    subject = NewsSubject()
 
-        log = LogObserver()
-        email = EmailObserver()
+    log = LogObserver()
+    email = EmailObserver()
 
-        subject.subscribe(log, {"sports", "breaking"})
-        subject.subscribe(email)
+    # log écoute sports + breaking
+    subject.subscribe(log, {"sports", "breaking"})
 
-        sms = SmsObserver()
-        subject.subscribe(sms, {"breaking"})
+    # email écoute tout
+    subject.subscribe(email)
 
-        subject.notify("weather", "rain")
-        subject.notify("sports", "goal")
-        subject.notify("breaking", "alert")
+    # sms écoute seulement breaking
+    sms = SmsObserver()
+    subject.subscribe(sms, {"breaking"})
 
-
-if __name__ == "__main__":
-    main()
+    # événements
+    subject.notify("weather", "rain")
+    subject.notify("sports", "goal")
+    subject.notify
