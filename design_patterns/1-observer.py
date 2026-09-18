@@ -16,7 +16,6 @@ class NewsSubject:
                 self._observers[topic].remove(observer)
 
     def notify(self, topic, data):
-        # snapshot to avoid modification during iteration
         observers = set()
         if topic in self._observers:
             observers |= self._observers[topic]
@@ -43,14 +42,21 @@ class SmsObserver:
 
 
 def main():
-    subject = NewsSubject()
+        subject = NewsSubject()
 
-    # Existing observers
-    log = LogObserver()
-    email = EmailObserver()
+        log = LogObserver()
+        email = EmailObserver()
 
-    subject.subscribe(log, {"sports", "breaking"})
-    subject.subscribe(email)  # all topics
+        subject.subscribe(log, {"sports", "breaking"})
+        subject.subscribe(email)
 
-    # 👉 NEW OBSERVER (task requirement)
-    sms = SmsObserver
+        sms = SmsObserver()
+        subject.subscribe(sms, {"breaking"})
+
+        subject.notify("weather", "rain")
+        subject.notify("sports", "goal")
+        subject.notify("breaking", "alert")
+
+
+if __name__ == "__main__":
+    main()
