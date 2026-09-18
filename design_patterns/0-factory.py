@@ -43,6 +43,7 @@ class VehicleFactory:
             raise ValueError(f"Unknown vehicle kind: {kind}")
         return cls()
 
+
 def main():
     factory = VehicleFactory()
 
