@@ -6,7 +6,7 @@ class NewsSubject:
 
     def subscribe(self, observer, topics=None):
         if topics is None:
-            topics = {"*"}   # écoute tous les topics
+            topics = {"*"}  # écoute tous les topics
         for topic in topics:
             self._observers.setdefault(topic, set()).add(observer)
 
