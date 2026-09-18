@@ -65,4 +65,8 @@ def main():
     # événements
     subject.notify("weather", "rain")
     subject.notify("sports", "goal")
-    subject.notify
+    subject.notify("breaking", "alert")
+
+
+if __name__ == "__main__":
+    main()
