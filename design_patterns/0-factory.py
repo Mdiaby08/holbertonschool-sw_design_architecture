@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 class Vehicle:
     def mode(self):
         raise NotImplementedError
