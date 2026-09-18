@@ -1,2 +1,8 @@
 #!/usr/bin/env python3
-factory.register_kind("scooter", Scooter)
+def create(self, kind: str):
+    if kind == "bus":
+        return Bus()
+    elif kind == "train":
+        return Train()
+    elif kind == "scooter":    # must edit here every time
+        return Scooter()
