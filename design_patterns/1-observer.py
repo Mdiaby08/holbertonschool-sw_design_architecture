@@ -1,34 +1,24 @@
 #!/usr/bin/env python3
 
+
 class NewsSubject:
     def __init__(self):
-        self._observers = {}
+        self._observers = []
 
     def subscribe(self, observer, topics=None):
-        if topics is None:
-            topics = {"*"}  # écoute tous les topics
-        for topic in topics:
-            self._observers.setdefault(topic, set()).add(observer)
+        self._observers.append((observer, topics))
 
     def unsubscribe(self, observer):
-        for topic in list(self._observers.keys()):
-            if observer in self._observers[topic]:
-                self._observers[topic].remove(observer)
+        self._observers = [
+            (obs, topics)
+            for obs, topics in self._observers
+            if obs != observer
+        ]
 
     def notify(self, topic, data):
-        observers = set()
-
-        # observers spécifiques au topic
-        if topic in self._observers:
-            observers |= self._observers[topic]
-
-        # observers qui écoutent tous les topics
-        if "*" in self._observers:
-            observers |= self._observers["*"]
-
-        # notification
-        for obs in list(observers):
-            obs.update(topic, data)
+        for observer, topics in list(self._observers):
+            if topics is None or topic in topics:
+                observer.update(topic, data)
 
 
 class LogObserver:
@@ -49,20 +39,16 @@ class SmsObserver:
 def main():
     subject = NewsSubject()
 
-    log = LogObserver()
-    email = EmailObserver()
+    log_observer = LogObserver()
+    email_observer = EmailObserver()
+    sms_observer = SmsObserver()
 
-    # log écoute sports + breaking
-    subject.subscribe(log, {"sports", "breaking"})
+    subject.subscribe(log_observer, topics={"sports", "breaking"})
 
-    # email écoute tout
-    subject.subscribe(email)
+    subject.subscribe(email_observer)
 
-    # sms écoute seulement breaking
-    sms = SmsObserver()
-    subject.subscribe(sms, {"breaking"})
+    subject.subscribe(sms_observer, topics={"breaking"})
 
-    # événements
     subject.notify("weather", "rain")
     subject.notify("sports", "goal")
     subject.notify("breaking", "alert")
